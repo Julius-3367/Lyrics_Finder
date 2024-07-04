@@ -90,7 +90,7 @@ form input {
   list-style: none;
   margin-bottom: 15px;
   display: flex;
-  align-items: end;
+  align-items: center;
   justify-content: space-between;
   border-radius: 2px;
   background: #a94bbb;
@@ -126,3 +126,18 @@ form input {
   background: #d9d9d9;
   color: #000;
 }
+
+.loading {
+  display: none;
+  color: #ca3fc1;
+  font-size: 1.2em;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  font-size: 1.2em;
+}
+
