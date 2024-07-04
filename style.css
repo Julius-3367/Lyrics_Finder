@@ -30,21 +30,24 @@ h1 {
 }
 
 .box {
-  padding-top: 220px;
-  padding-left: 90px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 36px rgb(67 67 67 / 6%);
   border-radius: 10px;
-  position: relative;
+  background: #fff;
 }
 
 .box-bg {
   background-image: url("music.jpg");
   background-repeat: no-repeat;
-  background-size: auto;
-  height: 500px;
-  width: 1000px;
+  background-size: cover;
+  height: 300px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 form input {
@@ -60,84 +63,59 @@ form input {
   background: #ca3fc1;
   border: none;
   color: #ffffff;
-  padding: 6px 22px;
-  display: inline-block;
+  padding: 10px 20px;
   font-size: 14px;
-  text-decoration: none;
-  letter-spacing: 0.04px;
   text-transform: uppercase;
-  min-height: 40px;
   cursor: pointer;
   border-radius: 4px;
 }
 
 .btn:hover {
   background: #c154c1;
-  color: #ffffff;
 }
 
 .result.box {
-  padding: 0px;
+  padding: 0;
   margin-top: 20px;
 }
 
-.full-lyrics,
-.result ul {
-  padding: 20px;
+.song-list {
+  list-style: none;
+  padding: 0;
 }
 
-.result ul li {
-  list-style: none;
+.song-list li {
   margin-bottom: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 2px;
   background: #a94bbb;
   color: #fff;
   padding: 15px;
+  border-radius: 4px;
 }
 
-.result ul li img {
-  max-width: 120px;
-  float: left;
+.song-list li img {
+  max-width: 50px;
+  border-radius: 50%;
   margin-right: 15px;
-  border-radius: 4px;
 }
 
-.result ul li span {
+.song-list li span {
   background: #fff;
-  border: none;
   color: #222;
-  padding: 10px 22px;
-  display: inline-block;
+  padding: 10px 20px;
   border-radius: 4px;
-  font-size: 12px;
-  font-weight: 700;
-  text-decoration: none;
-  margin-top: 5px;
-  font-weight: 400;
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
   cursor: pointer;
 }
 
-.result ul li span:hover {
+.song-list li span:hover {
   background: #d9d9d9;
-  color: #000;
 }
 
-.loading {
-  display: none;
-  color: #ca3fc1;
-  font-size: 1.2em;
-  text-align: center;
-  margin-top: 20px;
-}
-
-.error {
-  color: red;
-  text-align: center;
-  font-size: 1.2em;
+.full-lyrics {
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
 }
 
