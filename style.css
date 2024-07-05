@@ -19,6 +19,12 @@ h1 {
   color: #fff;
 }
 
+h2 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  color: #444;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -36,6 +42,7 @@ h1 {
   box-shadow: 0 8px 36px rgb(67 67 67 / 6%);
   border-radius: 10px;
   background: #fff;
+  width: 100%;
 }
 
 .box-bg {
@@ -75,17 +82,17 @@ form input {
   background: #c154c1;
 }
 
-.result.box {
+.result.box, .saved-lyrics.box {
   padding: 0;
   margin-top: 20px;
 }
 
-.song-list {
+.song-list, #saved-lyrics-list {
   list-style: none;
   padding: 0;
 }
 
-.song-list li {
+.song-list li, #saved-lyrics-list li {
   margin-bottom: 15px;
   display: flex;
   align-items: center;
@@ -102,8 +109,7 @@ form input {
   margin-right: 15px;
 }
 
-.song-list li span,
-.song-list li button {
+.song-list li span, .song-list li button {
   background: #fff;
   color: #222;
   padding: 10px 20px;
@@ -111,8 +117,7 @@ form input {
   cursor: pointer;
 }
 
-.song-list li span:hover,
-.song-list li button:hover {
+.song-list li span:hover, .song-list li button:hover {
   background: #d9d9d9;
 }
 

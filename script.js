@@ -1,6 +1,7 @@
 const form = document.getElementById("form");
 const search = document.getElementById("search");
 const result = document.getElementById("result");
+const savedLyricsList = document.getElementById("saved-lyrics-list");
 
 // API URL
 const apiURL = "https://api.lyrics.ovh";
@@ -39,14 +40,12 @@ function showData(data) {
               <img src="${song.artist.picture}" alt="${song.artist.name}" />
               <strong>${song.artist.name}</strong> - ${song.title}
             </div>
-            <span class="get-lyrics btn" 
-                  data-artist="${song.artist.name}" 
-                  data-songtitle="${song.title}" 
-                  data-lyrics="${song.lyrics}">Get Lyrics</span>
+            <span class="get-lyrics btn"
+                  data-artist="${song.artist.name}"
+                  data-songtitle="${song.title}">Get Lyrics</span>
             <button class="save-lyrics btn"
                     data-artist="${song.artist.name}"
-                    data-songtitle="${song.title}"
-                    data-lyrics="${song.lyrics}">Save Lyrics</button>
+                    data-songtitle="${song.title}">Save Lyrics</button>
           </li>
         `).join('')}
       </ul>
@@ -67,8 +66,7 @@ result.addEventListener("click", async (e) => {
   } else if (clickedElement.classList.contains("save-lyrics")) {
     const artist = clickedElement.getAttribute("data-artist");
     const songTitle = clickedElement.getAttribute("data-songtitle");
-    const lyrics = clickedElement.getAttribute("data-lyrics");
-    saveLyrics(artist, songTitle, lyrics);
+    saveLyrics(artist, songTitle);
   }
 });
 
@@ -95,7 +93,7 @@ async function getLyrics(artist, songTitle) {
 }
 
 // Function to save lyrics to local storage
-function saveLyrics(artist, songTitle, lyrics) {
+function saveLyrics(artist, songTitle) {
   let savedLyrics = JSON.parse(localStorage.getItem("savedLyrics")) || [];
 
   // Check if lyrics already saved
@@ -104,16 +102,31 @@ function saveLyrics(artist, songTitle, lyrics) {
   });
 
   if (!existingLyric) {
-    savedLyrics.push({ artist, songTitle, lyrics });
+    savedLyrics.push({ artist, songTitle });
     localStorage.setItem("savedLyrics", JSON.stringify(savedLyrics));
+    displaySavedLyrics();
     alert("Lyrics saved successfully!");
   } else {
     alert("Lyrics already saved!");
   }
 }
 
+// Function to display saved lyrics
+function displaySavedLyrics() {
+  let savedLyrics = JSON.parse(localStorage.getItem("savedLyrics")) || [];
+
+  savedLyricsList.innerHTML = savedLyrics.map((lyric) => `
+    <li>
+      <strong>${lyric.artist}</strong> - ${lyric.songTitle}
+    </li>
+  `).join('');
+}
+
 // Function to show error message
 function showError(message) {
   result.innerHTML = `<p>${message}</p>`;
 }
+
+// Display saved lyrics on page load
+document.addEventListener("DOMContentLoaded", displaySavedLyrics);
 
