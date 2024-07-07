@@ -118,8 +118,33 @@ function displaySavedLyrics() {
   savedLyricsList.innerHTML = savedLyrics.map((lyric) => `
     <li>
       <strong>${lyric.artist}</strong> - ${lyric.songTitle}
+      <button class="delete-lyrics btn" data-artist="${lyric.artist}" data-songtitle="${lyric.songTitle}">Delete</button>
     </li>
   `).join('');
+}
+
+// Event listener for delete button
+savedLyricsList.addEventListener("click", (e) => {
+  const clickedElement = e.target;
+
+  if (clickedElement.classList.contains("delete-lyrics")) {
+    const artist = clickedElement.getAttribute("data-artist");
+    const songTitle = clickedElement.getAttribute("data-songtitle");
+    deleteLyrics(artist, songTitle);
+  }
+});
+
+// Function to delete lyrics from local storage
+function deleteLyrics(artist, songTitle) {
+  let savedLyrics = JSON.parse(localStorage.getItem("savedLyrics")) || [];
+
+  savedLyrics = savedLyrics.filter((lyric) => {
+    return lyric.artist !== artist || lyric.songTitle !== songTitle;
+  });
+
+  localStorage.setItem("savedLyrics", JSON.stringify(savedLyrics));
+  displaySavedLyrics();
+  alert("Lyrics deleted successfully!");
 }
 
 // Function to show error message
