@@ -2,6 +2,7 @@ const form = document.getElementById("form");
 const search = document.getElementById("search");
 const result = document.getElementById("result");
 const savedLyricsList = document.getElementById("saved-lyrics-list");
+const backBtn = document.getElementById("backBtn");
 
 // API URL
 const apiURL = "https://api.lyrics.ovh";
@@ -21,11 +22,14 @@ form.addEventListener("submit", (e) => {
 // Search song
 async function searchSong(searchValue) {
   try {
+    showSpinner();
     const searchResult = await fetch(`${apiURL}/suggest/${searchValue}`);
     const data = await searchResult.json();
     showData(data);
   } catch (error) {
     showError("Something went wrong. Please try again later.");
+  } finally {
+    hideSpinner();
   }
 }
 
@@ -73,6 +77,7 @@ result.addEventListener("click", async (e) => {
 // Get song lyrics
 async function getLyrics(artist, songTitle) {
   try {
+    showSpinner();
     const res = await fetch(`${apiURL}/v1/${artist}/${songTitle}`);
     const data = await res.json();
 
@@ -84,11 +89,14 @@ async function getLyrics(artist, songTitle) {
           <p>${lyrics}</p>
         </div>
       `;
+      backBtn.style.display = "block";
     } else {
       showError("No lyrics found for this song.");
     }
   } catch (error) {
     showError("Something went wrong. Please try again later.");
+  } finally {
+    hideSpinner();
   }
 }
 
@@ -115,15 +123,24 @@ function saveLyrics(artist, songTitle) {
 function displaySavedLyrics() {
   let savedLyrics = JSON.parse(localStorage.getItem("savedLyrics")) || [];
 
-  savedLyricsList.innerHTML = savedLyrics.map((lyric) => `
-    <li>
-      <strong>${lyric.artist}</strong> - ${lyric.songTitle}
-      <button class="delete-lyrics btn" data-artist="${lyric.artist}" data-songtitle="${lyric.songTitle}">Delete</button>
-    </li>
-  `).join('');
+  if (savedLyrics.length > 0) {
+    savedLyricsList.innerHTML = savedLyrics.map((lyric) => `
+      <li>
+        <span>${lyric.artist} - ${lyric.songTitle}</span>
+        <button class="view-lyrics btn"
+                data-artist="${lyric.artist}"
+                data-songtitle="${lyric.songTitle}">View</button>
+        <button class="delete-lyrics btn"
+                data-artist="${lyric.artist}"
+                data-songtitle="${lyric.songTitle}">Delete</button>
+      </li>
+    `).join('');
+  } else {
+    savedLyricsList.innerHTML = "<p>No lyrics saved.</p>";
+  }
 }
 
-// Event listener for delete button
+// Event listener for saved lyrics actions
 savedLyricsList.addEventListener("click", (e) => {
   const clickedElement = e.target;
 
@@ -131,6 +148,10 @@ savedLyricsList.addEventListener("click", (e) => {
     const artist = clickedElement.getAttribute("data-artist");
     const songTitle = clickedElement.getAttribute("data-songtitle");
     deleteLyrics(artist, songTitle);
+  } else if (clickedElement.classList.contains("view-lyrics")) {
+    const artist = clickedElement.getAttribute("data-artist");
+    const songTitle = clickedElement.getAttribute("data-songtitle");
+    getLyrics(artist, songTitle);
   }
 });
 
@@ -144,14 +165,32 @@ function deleteLyrics(artist, songTitle) {
 
   localStorage.setItem("savedLyrics", JSON.stringify(savedLyrics));
   displaySavedLyrics();
-  alert("Lyrics deleted successfully!");
 }
 
 // Function to show error message
 function showError(message) {
-  result.innerHTML = `<p>${message}</p>`;
+  result.innerHTML = `<p class="error">${message}</p>`;
 }
 
-// Display saved lyrics on page load
-document.addEventListener("DOMContentLoaded", displaySavedLyrics);
+// Function to show loading spinner
+function showSpinner() {
+  result.innerHTML = '<div class="spinner"></div>';
+}
+
+// Function to hide loading spinner
+function hideSpinner() {
+  const spinner = document.querySelector(".spinner");
+  if (spinner) {
+    spinner.remove();
+  }
+}
+
+// Back button event listener
+backBtn.addEventListener("click", () => {
+  result.innerHTML = '';
+  backBtn.style.display = "none";
+});
+
+// Initialize saved lyrics display
+displaySavedLyrics();
 
