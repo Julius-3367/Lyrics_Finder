@@ -20,12 +20,12 @@ form.addEventListener("submit", (e) => {
 });
 
 // Search song
-async function searchSong(searchValue) {
+async function searchSong(searchValue, page = 1) {
   try {
     showSpinner();
-    const searchResult = await fetch(`${apiURL}/suggest/${searchValue}`);
+    const searchResult = await fetch(`${apiURL}/suggest/${searchValue}?page=${page}`);
     const data = await searchResult.json();
-    showData(data);
+    showData(data, searchValue);
   } catch (error) {
     showError("Something went wrong. Please try again later.");
   } finally {
@@ -34,7 +34,7 @@ async function searchSong(searchValue) {
 }
 
 // Display search results
-function showData(data) {
+function showData(data, searchValue) {
   if (data && data.data && data.data.length > 0) {
     result.innerHTML = `
       <ul class="song-list">
@@ -53,6 +53,10 @@ function showData(data) {
           </li>
         `).join('')}
       </ul>
+      <div class="pagination">
+        ${data.prev ? `<button class="btn page-btn" data-page="${data.prev}">Prev</button>` : ''}
+        ${data.next ? `<button class="btn page-btn" data-page="${data.next}">Next</button>` : ''}
+      </div>
     `;
   } else {
     showError("No songs found. Please try a different search term.");
@@ -71,6 +75,9 @@ result.addEventListener("click", async (e) => {
     const artist = clickedElement.getAttribute("data-artist");
     const songTitle = clickedElement.getAttribute("data-songtitle");
     saveLyrics(artist, songTitle);
+  } else if (clickedElement.classList.contains("page-btn")) {
+    const page = clickedElement.getAttribute("data-page");
+    searchSong(search.value, page);
   }
 });
 
@@ -87,6 +94,9 @@ async function getLyrics(artist, songTitle) {
         <div class="full-lyrics">
           <h2>${artist} - ${songTitle}</h2>
           <p>${lyrics}</p>
+          <button class="save-lyrics btn"
+                  data-artist="${artist}"
+                  data-songtitle="${songTitle}">Save Lyrics</button>
         </div>
       `;
       backBtn.style.display = "block";
@@ -110,7 +120,8 @@ function saveLyrics(artist, songTitle) {
   });
 
   if (!existingLyric) {
-    savedLyrics.push({ artist, songTitle });
+    const timestamp = new Date().toLocaleString();
+    savedLyrics.push({ artist, songTitle, timestamp });
     localStorage.setItem("savedLyrics", JSON.stringify(savedLyrics));
     displaySavedLyrics();
     alert("Lyrics saved successfully!");
@@ -126,7 +137,7 @@ function displaySavedLyrics() {
   if (savedLyrics.length > 0) {
     savedLyricsList.innerHTML = savedLyrics.map((lyric) => `
       <li>
-        <span>${lyric.artist} - ${lyric.songTitle}</span>
+        <span>${lyric.artist} - ${lyric.songTitle} <br><small>${lyric.timestamp}</small></span>
         <button class="view-lyrics btn"
                 data-artist="${lyric.artist}"
                 data-songtitle="${lyric.songTitle}">View</button>

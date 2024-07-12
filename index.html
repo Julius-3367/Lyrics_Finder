@@ -1,37 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Song Lyrics</title>
-  <!-- Google font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&display=swap" rel="stylesheet">
-  <!-- css file -->
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyrics App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div class="container">
-    <div class="box box-bg">
-      <h1>Search Lyrics</h1>
-      <form id="form">
-        <input type="search" id="search" placeholder="Enter artist name or song title">
-        <button class="btn" type="submit">Search</button>
-      </form>
+    <div class="container">
+        <div class="box box-bg">
+            <h1>Lyrics App</h1>
+            <form id="form">
+                <input type="text" id="search" placeholder="Search for any song lyrics">
+                <button type="submit" class="btn">Search</button>
+            </form>
+        </div>
+        <div id="result" class="box"></div>
+        <button id="backBtn" class="btn back" style="display: none;">Back to Results</button>
+        <div id="saved-lyrics-list" class="box box-bg">
+            <h2>Saved Lyrics</h2>
+        </div>
+        <div class="developer">Developed by: Korir k Julius</div>
     </div>
-    <section class="result box" id="result"></section>
-    <section class="saved-lyrics box" id="saved-lyrics">
-      <h2>Saved Lyrics</h2>
-      <ul id="saved-lyrics-list"></ul>
-    </section>
-    <div id="backBtn" class="btn back" style="display:none;">Back</div>
-    <div class="developer">Developed by: Julius Korir</div>
-  </div>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
-
 </html>
 
