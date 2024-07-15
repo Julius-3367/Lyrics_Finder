@@ -147,35 +147,34 @@ function displaySavedLyrics() {
       </li>
     `).join('');
   } else {
-    savedLyricsList.innerHTML = "<p>No lyrics saved.</p>";
+    savedLyricsList.innerHTML = "<p>No saved lyrics found.</p>";
   }
 }
 
-// Event listener for saved lyrics actions
+// Event listener for saved lyrics list
 savedLyricsList.addEventListener("click", (e) => {
   const clickedElement = e.target;
 
-  if (clickedElement.classList.contains("delete-lyrics")) {
-    const artist = clickedElement.getAttribute("data-artist");
-    const songTitle = clickedElement.getAttribute("data-songtitle");
-    deleteLyrics(artist, songTitle);
-  } else if (clickedElement.classList.contains("view-lyrics")) {
+  if (clickedElement.classList.contains("view-lyrics")) {
     const artist = clickedElement.getAttribute("data-artist");
     const songTitle = clickedElement.getAttribute("data-songtitle");
     getLyrics(artist, songTitle);
+  } else if (clickedElement.classList.contains("delete-lyrics")) {
+    const artist = clickedElement.getAttribute("data-artist");
+    const songTitle = clickedElement.getAttribute("data-songtitle");
+    deleteLyrics(artist, songTitle);
   }
 });
 
 // Function to delete lyrics from local storage
 function deleteLyrics(artist, songTitle) {
   let savedLyrics = JSON.parse(localStorage.getItem("savedLyrics")) || [];
-
   savedLyrics = savedLyrics.filter((lyric) => {
     return lyric.artist !== artist || lyric.songTitle !== songTitle;
   });
-
   localStorage.setItem("savedLyrics", JSON.stringify(savedLyrics));
   displaySavedLyrics();
+  alert("Lyrics deleted successfully!");
 }
 
 // Function to show error message
@@ -183,12 +182,12 @@ function showError(message) {
   result.innerHTML = `<p class="error">${message}</p>`;
 }
 
-// Function to show loading spinner
+// Function to show spinner
 function showSpinner() {
-  result.innerHTML = '<div class="spinner"></div>';
+  result.innerHTML = `<div class="spinner"></div>`;
 }
 
-// Function to hide loading spinner
+// Function to hide spinner
 function hideSpinner() {
   const spinner = document.querySelector(".spinner");
   if (spinner) {
@@ -196,12 +195,14 @@ function hideSpinner() {
   }
 }
 
-// Back button event listener
+// Event listener for back button
 backBtn.addEventListener("click", () => {
-  result.innerHTML = '';
+  result.innerHTML = "";
+  search.value = "";
   backBtn.style.display = "none";
+  search.focus();
 });
 
-// Initialize saved lyrics display
+// Display saved lyrics on page load
 displaySavedLyrics();
 
